@@ -1,0 +1,72 @@
+/* Form fields, shared by the movement and goal screens, the welcome and the prices sheet. */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.optional {
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+/* 48px, rounded, with an edge that stands out 3:1 from the page; the kit colour rings it while typing. */
+.input,
+.textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--color-field-border);
+  border-radius: var(--radius-field);
+  background: var(--color-surface);
+  font-size: 1rem;
+}
+
+.textarea {
+  height: 128px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+  outline: none;
+}
+
+.short {
+  width: 112px;
+}
+
+/* iOS centres the date inside the field; keep it where every other value starts. */
+.input::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.hint {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+/* Two dates side by side only where both fit; on a phone the second goes under the first. */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 12px;
+}

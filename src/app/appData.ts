@@ -20,6 +20,8 @@ export interface AppData {
   priceStatus: { refreshing: boolean; failed: boolean }
   /** Asks the price service now ("Şimdi yenile"), then downloads the month ends the chart lacks. */
   refreshPrices: () => void
+  /** Downloads the month ends the chart lacks, without asking for today's prices again. */
+  loadHistory: () => void
   /** Reads everything from IndexedDB again, e.g. after a backup was restored. */
   reload: () => Promise<void>
 }

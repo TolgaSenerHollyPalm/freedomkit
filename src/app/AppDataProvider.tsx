@@ -79,6 +79,7 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
   )
 
   const refreshPrices = useCallback(() => void askPrices(true), [askPrices])
+  const loadHistory = useCallback(() => void askPrices(false), [askPrices])
 
   useEffect(() => {
     let active = true
@@ -152,8 +153,8 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
   )
 
   const value = useMemo(
-    () => data && { ...data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, priceStatus, refreshPrices, reload },
-    [data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, priceStatus, refreshPrices, reload],
+    () => data && { ...data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, priceStatus, refreshPrices, loadHistory, reload },
+    [data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, priceStatus, refreshPrices, loadHistory, reload],
   )
 
   if (loadFailed) {

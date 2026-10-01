@@ -1,0 +1,60 @@
+/* On a white card, as the design draws the coin counter and the goal. */
+.card {
+  min-height: 60px;
+  padding: 8px 8px 8px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 12px 14px;
+}
+
+.wide {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.number {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+}
+
+.input {
+  width: 3.5ch;
+  height: var(--tap-size);
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--color-primary);
+}
+
+.big {
+  width: 2.2ch;
+  font-size: 2.25rem;
+  letter-spacing: -0.03em;
+  text-align: right;
+}
+
+.unit {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.caption {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  text-align: center;
+}

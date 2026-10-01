@@ -4,6 +4,8 @@ import type { AssetKind } from './types.ts'
 // Amounts are whole hundredths of their unit everywhere, so sums never pick up floating point dust (plan 3).
 const LIMIT = 1e15
 
+export const MINUS = '\u2212'
+
 const numbers = new Map<number, Intl.NumberFormat>()
 function number(value: number, fractionDigits: number): string {
   let format = numbers.get(fractionDigits)
@@ -11,7 +13,8 @@ function number(value: number, fractionDigits: number): string {
     format = new Intl.NumberFormat('tr-TR', { maximumFractionDigits: fractionDigits })
     numbers.set(fractionDigits, format)
   }
-  return format.format(value)
+  // Intl writes a hyphen; the movement titles use the minus sign, and so does every amount.
+  return format.format(value).replace('-', MINUS)
 }
 
 /** "1.000", "2,5": an amount kept in hundredths, with the decimals it has. */
@@ -55,7 +58,3 @@ export function parseAmount(text: string): number | undefined {
   const hundredths = Number(match[1]) * 100 + Number((match[2] ?? '').padEnd(2, '0'))
   return hundredths > 0 && hundredths < LIMIT ? hundredths : undefined
 }
-
-/** What a form field starts with for an amount kept in hundredths: "2,5", "1250". */
-export const amountInput = (hundredths: number): string =>
-  new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 2, useGrouping: false }).format(hundredths / 100)

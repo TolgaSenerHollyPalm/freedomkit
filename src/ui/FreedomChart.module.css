@@ -1,0 +1,86 @@
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.grid,
+.base,
+.goal,
+.line {
+  fill: none;
+}
+
+.grid {
+  stroke: var(--color-divider);
+}
+
+.base {
+  stroke: var(--color-border);
+}
+
+.axis text,
+.months text {
+  font-size: 12px;
+  fill: var(--color-muted);
+}
+
+.axis text {
+  text-anchor: end;
+}
+
+.months text {
+  text-anchor: middle;
+}
+
+.months .current {
+  font-weight: 700;
+  fill: var(--color-text);
+}
+
+.goal {
+  stroke: var(--color-amber-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+
+.goalLabel {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--color-amber-text);
+  text-anchor: end;
+}
+
+.area {
+  fill: var(--color-primary);
+  fill-opacity: 0.1;
+}
+
+.line {
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dot,
+.point {
+  fill: var(--color-primary);
+}
+
+.point {
+  stroke: var(--color-surface);
+  stroke-width: 2.5;
+}
+
+.bubble {
+  fill: var(--color-primary);
+}
+
+.bubbleText {
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--color-on-primary);
+  text-anchor: middle;
+}

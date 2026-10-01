@@ -1,0 +1,210 @@
+/* Ekle / Çıkar, as kitshelf-ui's segmented tabs look, but a radio group: it changes the form, not a panel. */
+.switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-field);
+  background: var(--color-sunken);
+}
+
+.segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--tap-size);
+  padding: 0 8px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.segment[aria-checked='true'] {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 3px rgb(27 31 30 / 0.12);
+}
+
+.segment[aria-checked='true'] svg {
+  color: var(--color-primary-dark);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0; /* a fieldset is as wide as its content by default and would push past a narrow screen */
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.group > legend {
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.legend {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* The eight kinds, four to a row as in the design. */
+.kinds {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.kind {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  height: 64px;
+  padding: 0 2px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.kind svg {
+  color: var(--color-chip-text);
+}
+
+.gold svg {
+  color: var(--color-amber-text);
+}
+
+.kind[aria-checked='true'] {
+  border: 2px solid var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.kind[aria-checked='true'] svg {
+  color: var(--color-primary-dark);
+}
+
+@media (hover: hover) {
+  .kind:hover {
+    border-color: var(--color-check-border);
+  }
+}
+
+.kind:focus-visible,
+.segment:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Aylık giderin: two cards, the chosen one in the kit's colour. */
+.option {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.chosen {
+  border: 2px solid var(--color-primary);
+  padding: 13px;
+  background: var(--color-primary-soft);
+}
+
+.radio {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 24px;
+  cursor: pointer;
+}
+
+.radio input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+.radioText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.radioTitle {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.radioHint {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.amount {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 34px;
+}
+
+.lira {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid var(--color-field-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+
+.lira:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.lira input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  outline: none;
+}
+
+.unit {
+  flex: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}

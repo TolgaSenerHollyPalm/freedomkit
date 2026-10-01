@@ -1,0 +1,46 @@
+.reminder {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: var(--color-amber-soft);
+}
+
+.reminder svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--color-amber-text);
+}
+
+.reminderTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.reminderLine {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.goal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.info {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.info svg {
+  flex: none;
+  margin-top: 1px;
+}

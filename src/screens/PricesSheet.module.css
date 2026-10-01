@@ -1,0 +1,70 @@
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 10px 0 2px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.price {
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Under the price it is about, at the right. */
+.action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* The text button's own right padding off, so its words end where the price does. */
+.action button {
+  padding-right: 0;
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 0 4px;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.source {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+}
+
+.sourceLine {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}

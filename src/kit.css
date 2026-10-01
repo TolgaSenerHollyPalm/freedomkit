@@ -7,6 +7,12 @@
   --color-primary-dark: #2f3d80; /* text and icons in the kit colour */
   --color-primary-soft: #e3e7f6; /* chosen options, tiles */
   --color-on-primary: #ffffff; /* text on --color-primary */
+
+  /* The home card is navy in both schemes (plan 2.1): white 7.2:1, the quiet lines 5.8:1, the ring 3.8:1. */
+  --kit-card: #3f51a3;
+  --kit-card-text: #ffffff;
+  --kit-card-quiet: #e3e7f6;
+  --kit-card-ring: #f0b23f;
 }
 
 :root[data-scheme='dark'] {

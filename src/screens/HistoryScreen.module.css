@@ -1,0 +1,102 @@
+.chartCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 16px 4px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.chartTitle {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.note {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.chartCard .note {
+  padding-bottom: 8px;
+}
+
+.month {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--color-divider);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.month svg {
+  flex: none;
+}
+
+.up {
+  color: var(--color-success);
+}
+
+.down {
+  color: var(--color-coral-text);
+}
+
+.movements {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.monthGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.monthTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.in,
+.out {
+  font-weight: 700;
+}
+
+.in {
+  color: var(--color-success);
+}
+
+.out {
+  color: var(--color-coral-text);
+}
+
+.movementNote {
+  display: block;
+}
+
+.worth {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px var(--space);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  line-height: 1.5;
+}

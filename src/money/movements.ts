@@ -1,10 +1,8 @@
-import { amountPhrase, amountWithUnit } from './amounts.ts'
+import { amountPhrase, amountWithUnit, MINUS } from './amounts.ts'
 import { ASSETS } from './assets.ts'
 import { monthOf, type Month } from './dates.ts'
 import { availableOn, goesNegative } from './holdings.ts'
 import type { Day, Movement } from './types.ts'
-
-export const MINUS = '−'
 
 export type MovementFields = Pick<Movement, 'kind' | 'direction' | 'amount' | 'date' | 'note'>
 

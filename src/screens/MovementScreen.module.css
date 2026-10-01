@@ -1,0 +1,50 @@
+.amount {
+  position: relative;
+}
+
+.amount input {
+  padding-right: 64px;
+}
+
+.unit {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px 16px;
+  border-radius: var(--radius);
+  background: var(--color-primary-soft);
+}
+
+.previewLabel,
+.previewEffect {
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.previewLabel {
+  font-size: 0.8125rem;
+}
+
+.previewEffect {
+  font-size: 0.9375rem;
+}
+
+.previewValue {
+  font-family: var(--font-display);
+  font-size: 1.875rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}

@@ -3,7 +3,10 @@ import toast from 'kitshelf-ui/app/toast.module.css'
 import { ToastProvider, Toasts } from 'kitshelf-ui/ui/Toast.tsx'
 import { useEffect } from 'react'
 import { KIT_NAME } from '../kit.ts'
+import GoalScreen from '../screens/GoalScreen.tsx'
+import HistoryScreen from '../screens/HistoryScreen.tsx'
 import HomeScreen from '../screens/HomeScreen.tsx'
+import MovementScreen from '../screens/MovementScreen.tsx'
 import SettingsScreen from '../screens/SettingsScreen.tsx'
 import { href, useRoute, type Route } from './router.ts'
 import AppDataProvider from './AppDataProvider.tsx'
@@ -38,5 +41,13 @@ function CurrentScreen({ route }: { route: Route }) {
       return <HomeScreen />
     case 'settings':
       return <SettingsScreen />
+    case 'add':
+      return <MovementScreen />
+    case 'movement':
+      return <MovementScreen movementId={route.movementId} />
+    case 'goal':
+      return <GoalScreen />
+    case 'history':
+      return <HistoryScreen />
   }
 }
