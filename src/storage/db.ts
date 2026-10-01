@@ -1,4 +1,6 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb'
+import type { RestoreCount, RestoreMode } from 'kitshelf-ui/backup/format.ts'
+import { planRestore, type KitData } from '../backup/restorePlan.ts'
 import { DATABASE_NAME } from '../kit.ts'
 import type { Movement, Overrides, PriceRecord, Settings } from '../money/types.ts'
 import { DATA_VERSION, migrateMovement } from './migrations.ts'
@@ -95,6 +97,25 @@ export async function savePrices(records: readonly PriceRecord[]): Promise<void>
   const db = await database()
   const tx = db.transaction('prices', 'readwrite')
   await Promise.all([...records.map((record) => tx.store.put(record)), tx.done])
+}
+
+/** Writes a backup in one transaction over the movements and the settings: all of it, or nothing. */
+export async function restoreBackup(data: KitData, mode: RestoreMode): Promise<RestoreCount[]> {
+  const db = await database()
+  const tx = db.transaction(['movements', 'meta'], 'readwrite')
+  const [movements, meta] = [tx.objectStore('movements'), tx.objectStore('meta')]
+  // Read and planned inside the transaction; awaiting anything but its own requests would end it.
+  const [stored, settings, overrides] = await Promise.all([movements.getAll(), meta.get('settings'), meta.get('overrides')])
+  const local: KitData = { movements: stored, settings: settings as Settings | undefined, overrides: (overrides as Overrides | undefined) ?? {} }
+  const plan = planRestore(local, data, mode)
+  await Promise.all([
+    ...(plan.clear ? [movements.clear()] : []),
+    ...plan.movements.map((movement) => movements.put(movement)),
+    plan.settings ? meta.put(plan.settings, 'settings') : meta.delete('settings'),
+    meta.put(plan.overrides, 'overrides'),
+    tx.done,
+  ])
+  return plan.counts
 }
 
 /** Asks the browser not to clear our data when the device runs low on space. */

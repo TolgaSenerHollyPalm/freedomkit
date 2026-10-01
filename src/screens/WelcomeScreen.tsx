@@ -2,9 +2,10 @@ import { Button } from 'kitshelf-ui/ui/Button.tsx'
 import { IconLink } from 'kitshelf-ui/ui/IconButton.tsx'
 import { SlidersIcon } from 'kitshelf-ui/ui/icons.tsx'
 import Screen from 'kitshelf-ui/ui/Screen.tsx'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { pricingOf, useAppData } from '../app/appData.ts'
 import { href } from '../app/router.ts'
+import { useRestore } from '../backup/useRestore.tsx'
 import { KIT_NAME } from '../kit.ts'
 import { parseAmount } from '../money/amounts.ts'
 import { unitPrice } from '../money/prices.ts'
@@ -20,6 +21,8 @@ import styles from './WelcomeScreen.module.css'
 /** The first visit, before there are any settings: what the kit does, and the monthly expense (plan 6.6). */
 export default function WelcomeScreen() {
   const data = useAppData()
+  const restore = useRestore()
+  const picker = useRef<HTMLInputElement>(null)
   const [mode, setMode] = useState<Expense['mode']>('amount')
   const [amount, setAmount] = useState('')
   const [tried, setTried] = useState(false)
@@ -70,10 +73,23 @@ export default function WelcomeScreen() {
           <InfoIcon />
           Yatırım tavsiyesi değildir.
         </p>
-        <a className={styles.restore} href={href({ screen: 'settings' })}>
+        <button type="button" className={styles.restore} onClick={() => picker.current?.click()}>
           Yedeğin var mı? Geri yükle
-        </a>
+        </button>
+        {/* As on the settings card: no accept filter, reading the file checks it instead. */}
+        <input
+          ref={picker}
+          type="file"
+          hidden
+          onChange={(event) => {
+            const file = event.target.files?.[0]
+            event.target.value = ''
+            if (file) restore.open(file)
+          }}
+        />
       </div>
+      {/* Restored settings make the home screen show instead of this one. */}
+      {restore.dialogs}
     </Screen>
   )
 }

@@ -106,8 +106,15 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('online', retry)
   }, [askPrices, priceFailed])
 
-  // A restore writes straight to IndexedDB; memory follows by reading it back.
-  const reload = useCallback(() => loadAll().then(apply), [apply])
+  // A restore writes straight to IndexedDB; memory follows by reading it back, and the chart's month ends download.
+  const reload = useCallback(
+    () =>
+      loadAll().then((stored) => {
+        apply(stored)
+        void askPrices(false)
+      }),
+    [apply, askPrices],
+  )
 
   // Opening takes a moment; if it takes this long, something is in the way and the user should know.
   useEffect(() => {

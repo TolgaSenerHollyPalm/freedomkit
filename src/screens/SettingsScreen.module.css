@@ -34,6 +34,32 @@
   font-variant-numeric: tabular-nums;
 }
 
+.about {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.aboutLine {
+  display: flex;
+  gap: 12px;
+  padding: 14px var(--space);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.aboutLine + .aboutLine {
+  border-top: 1px solid var(--color-divider);
+}
+
+.aboutLine svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--color-muted);
+}
+
 .later {
   margin-top: calc(var(--gap-section) - var(--gap-card));
 }
