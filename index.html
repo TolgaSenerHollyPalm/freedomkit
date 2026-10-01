@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The name, the description and the id in the script below come from .env; Vite fills in the VITE_KIT_ placeholders. -->
+    <title>%VITE_KIT_NAME%</title>
+    <meta name="description" content="%VITE_KIT_DESCRIPTION%" />
+    <meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111615" media="(prefers-color-scheme: dark)" />
+    <!-- Picks light or dark before the first paint; kitshelf-ui's app/appearance.ts takes over once the app runs. -->
+    <script>
+      {
+        let stored = null
+        try {
+          stored = localStorage.getItem('%VITE_KIT_ID%-appearance')
+        } catch {}
+        const fixed = stored === 'light' || stored === 'dark'
+        const dark = fixed ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.dataset.scheme = dark ? 'dark' : 'light'
+        if (fixed) {
+          for (const meta of document.querySelectorAll('meta[name="theme-color"]')) meta.content = dark ? '#111615' : '#f7f5f0'
+        }
+      }
+    </script>
+    <!-- Android reads the web manifest; iOS needs these to open a home-screen app without the browser bars. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" sizes="180x180" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

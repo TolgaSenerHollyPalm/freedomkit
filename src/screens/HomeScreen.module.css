@@ -1,0 +1,25 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.3125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* The first thing a new user sees: what this app is for, on a plain card. */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px var(--space);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.welcomeTitle {
+  font-size: 1.3rem;
+  line-height: 1.25;
+}

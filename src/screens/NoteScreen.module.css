@@ -1,0 +1,23 @@
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* An edge that stands out 3:1 from the page; the kit colour rings it while typing. */
+.input {
+  width: 100%;
+  min-height: 12rem;
+  padding: 12px 14px;
+  border: 1px solid var(--color-field-border);
+  border-radius: var(--radius-field);
+  background: var(--color-surface);
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+  outline: none;
+}
