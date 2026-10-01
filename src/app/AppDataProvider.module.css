@@ -1,0 +1,12 @@
+.message {
+  padding: 32px var(--space);
+  text-align: center;
+}
+
+.warning {
+  padding: 12px var(--space);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-weight: 600;
+  text-align: center;
+}
