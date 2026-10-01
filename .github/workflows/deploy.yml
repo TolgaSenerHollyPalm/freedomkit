@@ -1,10 +1,8 @@
-# Tests, builds and publishes the kit to GitHub Pages on every push to main.
-# Based on https://vite.dev/guide/static-deploy#github-pages
+# Tests, builds and publishes FreedomKit to GitHub Pages. Started by hand until the release, when
+# `push: branches: ['main']` comes back under `on:`. Based on https://vite.dev/guide/static-deploy#github-pages
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: ['main']
   workflow_dispatch:
 
 permissions:

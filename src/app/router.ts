@@ -1,7 +1,7 @@
 import { go, useHash } from 'kitshelf-ui/app/hashRouter.ts'
 
 // Routes live in the URL hash, so GitHub Pages only ever serves index.html.
-export type Route = { screen: 'home' } | { screen: 'settings' } | { screen: 'note-new' } | { screen: 'note'; noteId: string }
+export type Route = { screen: 'home' } | { screen: 'settings' }
 
 export function href(route: Route): string {
   switch (route.screen) {
@@ -9,24 +9,12 @@ export function href(route: Route): string {
       return '#/'
     case 'settings':
       return '#/settings'
-    case 'note-new':
-      return '#/notes/new'
-    case 'note':
-      return `#/note/${encodeURIComponent(route.noteId)}`
   }
 }
 
 export function parseRoute(hash: string): Route {
-  let parts: string[]
-  try {
-    parts = hash.replace(/^#/, '').split('?')[0].split('/').filter(Boolean).map(decodeURIComponent)
-  } catch {
-    return { screen: 'home' }
-  }
-  const [section, id] = parts
+  const [section] = hash.replace(/^#/, '').split('?')[0].split('/').filter(Boolean)
   if (section === 'settings') return { screen: 'settings' }
-  if (section === 'notes' && id === 'new') return { screen: 'note-new' }
-  if (section === 'note' && id) return { screen: 'note', noteId: id }
   return { screen: 'home' }
 }
 

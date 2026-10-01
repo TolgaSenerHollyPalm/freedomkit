@@ -1,5 +1,5 @@
 {
-  "name": "kit-template",
+  "name": "freedomkit",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "idb": "^8.0.3",
-    "kitshelf-ui": "github:TolgaSenerHollyPalm/kitshelf-ui#v0.2.1",
+    "kitshelf-ui": "github:TolgaSenerHollyPalm/kitshelf-ui#v0.4.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
