@@ -16,6 +16,10 @@ export interface AppData {
   setOverride: (kind: PricedKind, priceTRY: number | undefined) => void
   /** Keeps the records the price service brought. */
   addPrices: (records: PriceRecord[]) => void
+  /** Whether the price service is being asked right now, and whether the last ask failed. */
+  priceStatus: { refreshing: boolean; failed: boolean }
+  /** Asks the price service now ("Şimdi yenile"), then downloads the month ends the chart lacks. */
+  refreshPrices: () => void
   /** Reads everything from IndexedDB again, e.g. after a backup was restored. */
   reload: () => Promise<void>
 }

@@ -1,7 +1,9 @@
 import { trackDataSince } from 'kitshelf-ui/backup/state.ts'
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { KIT } from '../kit.ts'
+import { today } from '../money/dates.ts'
 import { stampMovement, withMovement } from '../money/movements.ts'
+import { latestRecord } from '../money/prices.ts'
 import type { Movement, Overrides, PriceRecord, PricedKind, Settings } from '../money/types.ts'
 import {
   blockedByAnotherTab,
@@ -14,12 +16,14 @@ import {
   saveSettings as storeSettings,
   type Stored,
 } from '../storage/db.ts'
+import { fetchDay, fetchLatest, missingMonthEnds, stale } from '../prices/service.ts'
 import { AppDataContext } from './appData.ts'
 import styles from './AppDataProvider.module.css'
 
 // The provider is mounted once, so module-level state is enough: the data as it is right now,
 // which two changes in a row build on rather than on the last render.
 let current: Stored = { movements: [], overrides: {}, prices: [] }
+let asking = false
 
 /** Loads everything from IndexedDB once, then keeps it in memory and writes every change back. */
 export default function AppDataProvider({ children }: { children: ReactNode }) {
@@ -27,6 +31,8 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
   const [loadFailed, setLoadFailed] = useState(false)
   const [slowLoad, setSlowLoad] = useState(false)
   const [saveFailed, setSaveFailed] = useState(false)
+  const [priceStatus, setPriceStatus] = useState({ refreshing: false, failed: false })
+  const priceFailed = priceStatus.failed
 
   const apply = useCallback((next: Stored) => {
     current = next
@@ -40,12 +46,48 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
     setSaveFailed(true)
   }, [])
 
+  const addPrices = useCallback(
+    (records: PriceRecord[]) => {
+      const kept = current.prices.filter((old) => !records.some((record) => record.date === old.date))
+      apply({ ...current, prices: [...kept, ...records] })
+      savePrices(records).catch(report)
+    },
+    [apply, report],
+  )
+
+  // Today's prices first, then the chart's month ends one at a time; one round at a time.
+  const askPrices = useCallback(
+    async (latestToo: boolean) => {
+      if (asking || !navigator.onLine) return
+      asking = true
+      try {
+        if (latestToo) {
+          setPriceStatus({ refreshing: true, failed: false })
+          const result = await fetchLatest(latestRecord(current.prices))
+          if (result.kind === 'record') addPrices([result.record])
+          setPriceStatus({ refreshing: false, failed: result.kind !== 'record' })
+        }
+        for (const day of missingMonthEnds(current.movements, today(), current.prices)) {
+          const record = await fetchDay(day)
+          if (record) addPrices([record])
+        }
+      } finally {
+        asking = false
+      }
+    },
+    [addPrices],
+  )
+
+  const refreshPrices = useCallback(() => void askPrices(true), [askPrices])
+
   useEffect(() => {
     let active = true
     requestPersistentStorage()
     loadAll()
       .then((stored) => {
-        if (active) apply(stored)
+        if (!active) return
+        apply(stored)
+        void askPrices(stale(latestRecord(stored.prices), new Date()))
       })
       .catch((error: unknown) => {
         console.error(error)
@@ -54,7 +96,14 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false
     }
-  }, [apply])
+  }, [apply, askPrices])
+
+  // Back online: ask again if today's prices are old or the last ask failed, and fill the chart's gaps.
+  useEffect(() => {
+    const retry = () => void askPrices(priceFailed || stale(latestRecord(current.prices), new Date()))
+    window.addEventListener('online', retry)
+    return () => window.removeEventListener('online', retry)
+  }, [askPrices, priceFailed])
 
   // A restore writes straight to IndexedDB; memory follows by reading it back.
   const reload = useCallback(() => loadAll().then(apply), [apply])
@@ -102,18 +151,9 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
     [apply, report],
   )
 
-  const addPrices = useCallback(
-    (records: PriceRecord[]) => {
-      const kept = current.prices.filter((old) => !records.some((record) => record.date === old.date))
-      apply({ ...current, prices: [...kept, ...records] })
-      savePrices(records).catch(report)
-    },
-    [apply, report],
-  )
-
   const value = useMemo(
-    () => data && { ...data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, reload },
-    [data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, reload],
+    () => data && { ...data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, priceStatus, refreshPrices, reload },
+    [data, saveMovement, deleteMovement, saveSettings, setOverride, addPrices, priceStatus, refreshPrices, reload],
   )
 
   if (loadFailed) {
