@@ -8,7 +8,7 @@ FreedomKit gives no investment advice.
 Built from [kit-template](https://github.com/TolgaSenerHollyPalm/kit-template) on
 [kitshelf-ui](https://github.com/TolgaSenerHollyPalm/kitshelf-ui), which brings the theme, the components and the
 backups. The designs are in `docs/design/freedomkit/`; the plan it is built from is `docs/plans/04-freedomkit/PLAN.md`
-in the quiz-trip repository.
+in the quiz-trip repository, and its texts were renewed with `docs/plans/08-freedomkit-anlatim/PLAN.md` there.
 
 ## Development
 

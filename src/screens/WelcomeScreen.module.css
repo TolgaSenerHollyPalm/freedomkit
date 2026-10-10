@@ -37,3 +37,88 @@
   text-underline-offset: 3px;
   cursor: pointer;
 }
+
+/* A worked example: with the intro's 8 px gap it sits 16 px under the text and 12 px over the next line. */
+.example {
+  overflow: hidden;
+  margin: 8px 0 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-surface);
+  line-height: normal;
+}
+
+.exampleBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px 12px;
+}
+
+.exampleTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.exampleRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.exampleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.exampleRow dt {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.exampleRow dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.exampleResult {
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1.5px dashed var(--color-border);
+}
+
+.exampleResult dt {
+  font-weight: 700;
+}
+
+.exampleResult dd {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.exampleBand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.exampleBand svg {
+  flex: none;
+  color: var(--color-amber-strong);
+}

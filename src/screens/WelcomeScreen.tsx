@@ -14,7 +14,7 @@ import { goldOptionText } from '../money/texts.ts'
 import type { Expense } from '../money/types.ts'
 import { ExpenseChoice } from '../ui/choices.tsx'
 import fields from '../ui/fields.module.css'
-import { InfoIcon } from '../ui/icons.tsx'
+import { InfoIcon, RingsIcon } from '../ui/icons.tsx'
 import home from './HomeScreen.module.css'
 import styles from './WelcomeScreen.module.css'
 
@@ -38,7 +38,7 @@ export default function WelcomeScreen() {
 
   return (
     <Screen
-      title="Birikimin kaç ay özgürlük ediyor?"
+      title="Birikimin kaç ay yeter?"
       icon={
         <span className={home.brand}>
           <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width={32} height={32} />
@@ -58,7 +58,38 @@ export default function WelcomeScreen() {
     >
       <div className={fields.form}>
         <div className={styles.intro}>
-          <p>Birikimlerini ekle, aylık giderini yaz; FreedomKit sana kaç ay kendi kararlarını verebileceğini göstersin.</p>
+          <p>
+            FreedomKit, gelirin kesilse birikiminle kaç ay geçinebileceğini gösterir: altınını, dövizini ve TL'ni güncel
+            fiyatla toplar, aylık giderine böler.
+          </p>
+          <section className={styles.example} aria-label="Örnek hesap">
+            <div className={styles.exampleBody}>
+              {/* The section's own label already says it; read aloud it would be said twice. */}
+              <span className={styles.exampleTitle} aria-hidden="true">
+                Örnek
+              </span>
+              <dl className={styles.exampleRows}>
+                <div className={styles.exampleRow}>
+                  <dt>Birikimin</dt>
+                  <dd>180.000 TL</dd>
+                </div>
+                <div className={styles.exampleRow}>
+                  <dt>Aylık giderin</dt>
+                  <dd>
+                    <span aria-hidden="true">÷ </span>45.000 TL
+                  </dd>
+                </div>
+                <div className={`${styles.exampleRow} ${styles.exampleResult}`}>
+                  <dt>Kaç ay yeter?</dt>
+                  <dd>4 ay</dd>
+                </div>
+              </dl>
+            </div>
+            <p className={styles.exampleBand}>
+              <RingsIcon />
+              Kaç ay yetiyorsa, o kadar özgürsün.
+            </p>
+          </section>
           <p className={styles.quiet}>Tutarların bu cihazdan hiçbir yere gitmez.</p>
         </div>
         <ExpenseChoice

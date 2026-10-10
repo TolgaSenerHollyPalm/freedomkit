@@ -30,7 +30,7 @@ import PricesSheet from './PricesSheet.tsx'
 import WelcomeScreen from './WelcomeScreen.tsx'
 
 const STATES: Record<Exclude<Freedom['state'], 'free'>, { title: string; line: string }> = {
-  empty: { title: 'Henüz birikim yok', line: 'İlk birikimini ekle; kaç ay özgür olduğunu hemen hesaplayalım.' },
+  empty: { title: 'Henüz birikim yok', line: 'İlk birikimini ekle; kaç ay geçinebileceğini hemen hesaplayalım.' },
   none: { title: 'Şu an birikimin yok', line: 'Yeni bir birikim ekleyince süre yeniden hesaplanır.' },
   priceless: { title: 'Fiyatlar alınamadı', line: 'İnternete bağlanınca hesaplanır. İstersen fiyatları elle de girebilirsin.' },
 }
@@ -87,6 +87,7 @@ function FreedomCard({ card, settings, tamValue, onPrices }: { card: Freedom; se
           <span className={styles.goalText}>Hedef {settings.goalMonths} ay</span>
         </div>
       </div>
+      {card.state === 'free' && <p className={styles.explain}>Gelirin kesilse, birikiminle bu kadar geçinebilirsin.</p>}
       <div className={styles.cardBottom}>
         <span className={styles.expense}>
           Aylık giderin <strong>{expenseText(settings, tamValue)}</strong>

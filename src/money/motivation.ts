@@ -7,8 +7,8 @@ const REMIND_AFTER_DAYS = 180
 
 /** Our own lines; nobody famous is quoted (plan 5.3). */
 export const FIXED_SENTENCES = [
-  'Paran varsa korkmazsın.',
-  'Her tam altın, bir ay kendi kararlarını vermek demek.',
+  'Kaç ay yetiyorsa, o kadar özgürsün.',
+  'Kenara koyduğun her altın, sana biraz daha zaman kazandırır.',
   'Küçük birikimler, büyük kararlar için zaman kazandırır.',
   'Özgürlük bir günde gelmez; gün gün birikir.',
   'Bugün kenara koyduğun, yarın sana zaman olarak döner.',

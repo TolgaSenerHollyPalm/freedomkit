@@ -73,7 +73,7 @@ export default function GoalScreen() {
           <h2 id="goal-title" className={text.sectionTitle}>
             Hedefin
           </h2>
-          <CountField label="Kaç ay özgür olmak istiyorsun?" value={goal} min={GOAL_LIMITS.min} max={GOAL_LIMITS.max} onChange={setGoal} unit="ay" centered />
+          <CountField label="Birikimin kaç ay yetsin?" value={goal} min={GOAL_LIMITS.min} max={GOAL_LIMITS.max} onChange={setGoal} unit="ay" centered />
         </section>
 
         <p className={styles.info}>

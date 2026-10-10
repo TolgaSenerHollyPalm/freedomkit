@@ -144,12 +144,20 @@
   color: var(--kit-card-quiet);
 }
 
+/* Across the whole card, under the duration and the ring. */
+.explain {
+  margin-top: 14px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--kit-card-text);
+}
+
 .cardBottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 14px;
   border-top: 1px solid rgb(255 255 255 / 0.18);
 }
 

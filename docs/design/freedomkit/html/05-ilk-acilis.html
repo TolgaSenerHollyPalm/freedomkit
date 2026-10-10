@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>FreedomKit — İlk açılış</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<!-- Fontlar: Bricolage Grotesque + Figtree -->
+<style>
+body{margin:0;background:#F7F5F0}
+a{color:#2F3D80}a:hover{color:#3F51A3}
+</style>
+</helmet>
+<div style="width: 390px; height: 970px; box-sizing: border-box; position: relative; overflow: hidden; display: flex; flex-direction: column; background: #F7F5F0; color: #1B1F1E; font-family: 'Figtree', system-ui, sans-serif">
+
+<header style="padding: 14px 20px 0; height: 62px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 10px"><svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3F51A3"></rect><circle cx="256" cy="264" r="148" fill="#F0B23F"></circle><circle cx="256" cy="264" r="114" fill="none" stroke="#C98A1A" stroke-width="14"></circle><path d="M160 244C194 212 236 216 256 274C276 216 318 212 352 244C318 234 284 242 256 306C228 242 194 234 160 244Z" fill="#3F51A3"></path></svg><span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -0.02em">FreedomKit</span></div>
+<button aria-label="Ayarlar" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #E8E2D7; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9" fill="none" stroke="#1B1F1E" stroke-width="1.8" stroke-linecap="round"></path><circle cx="15" cy="7" r="2.2" fill="none" stroke="#1B1F1E" stroke-width="1.8"></circle><circle cx="9" cy="17" r="2.2" fill="none" stroke="#1B1F1E" stroke-width="1.8"></circle></svg></button>
+</header>
+
+<h1 style="margin: 18px 20px 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 32px; line-height: 1.05; letter-spacing: -0.035em; font-weight: 800">Birikimin kaç ay yeter?</h1>
+<p style="margin: 12px 20px 0; font-size: 16px; line-height: 1.5">FreedomKit, gelirin kesilse birikiminle kaç ay geçinebileceğini gösterir: altınını, dövizini ve TL'ni güncel fiyatla toplar, aylık giderine böler.</p>
+
+<section aria-label="Örnek hesap" style="margin: 16px 20px 0; border-radius: 20px; border: 1px solid #E8E2D7; background: #FFFFFF; overflow: hidden">
+<div style="padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 13px; font-weight: 700; color: #5E6562">Örnek</span>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-size: 15px; color: #1B1F1E; font-weight: 500">Birikimin</span>
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -0.02em; color: #1B1F1E; font-variant-numeric: tabular-nums; white-space: nowrap">180.000 TL</span>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-size: 15px; color: #1B1F1E; font-weight: 500">Aylık giderin</span>
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -0.02em; color: #1B1F1E; font-variant-numeric: tabular-nums; white-space: nowrap">÷ 45.000 TL</span>
+</div>
+<div style="margin: 2px 0; border-top: 1.5px dashed #E8E2D7"></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<span style="font-size: 15px; color: #1B1F1E; font-weight: 700">Kaç ay yeter?</span>
+<span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: #2F3D80; font-variant-numeric: tabular-nums; white-space: nowrap">4 ay</span>
+</div>
+</div>
+<p style="margin: 0; padding: 12px 16px; background: #E3E7F6; color: #2F3D80; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px"><svg style="flex-shrink: 0" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#B97A0B" stroke-width="1.8"></circle><circle cx="12" cy="12" r="4.8" fill="none" stroke="#B97A0B" stroke-width="1.8"></circle></svg>Kaç ay yetiyorsa, o kadar özgürsün.</p>
+</section>
+<p style="margin: 12px 20px 0; font-size: 15px; line-height: 1.5; color: #5E6562">Tutarların bu cihazdan hiçbir yere gitmez.</p>
+
+<fieldset style="margin: 26px 20px 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0">
+<legend style="padding: 0; margin: 0 0 10px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -0.02em">Aylık giderin</legend>
+<div style="padding: 14px; border-radius: 16px; border: 2px solid #3F51A3; background: #E3E7F6; display: flex; flex-direction: column; gap: 12px">
+<label style="display: flex; align-items: center; gap: 12px; cursor: pointer">
+<input type="radio" name="gider-turu" checked="" style="margin: 0; width: 22px; height: 22px; accent-color: #3F51A3; flex-shrink: 0">
+<span style="font-size: 16px; font-weight: 700">Kendi rakamım</span>
+</label>
+<div style="margin-left: 34px; display: flex; flex-direction: column; gap: 8px">
+<label for="gider-tutar" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Aylık gider, TL</label>
+<div style="height: 52px; box-sizing: border-box; padding: 0 14px; border-radius: 14px; border: 1px solid #948C80; background: #FFFFFF; display: flex; align-items: center; gap: 8px">
+<input id="gider-tutar" type="text" inputmode="numeric" value="" aria-describedby="gider-ipucu" style="flex-grow: 1; min-width: 0; height: 48px; padding: 0; border: 0; background: transparent; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: #1B1F1E; outline: none">
+<span style="font-size: 16px; font-weight: 600; color: #5E6562">TL</span>
+</div>
+<span id="gider-ipucu" style="font-size: 13px; line-height: 1.45; color: #3F4542">Kira, fatura, market… bir ayda harcadığın toplam.</span>
+</div>
+</div>
+<label style="padding: 14px; border-radius: 16px; border: 1px solid #E8E2D7; background: #FFFFFF; display: flex; align-items: flex-start; gap: 12px; cursor: pointer">
+<input type="radio" name="gider-turu" style="margin: 0; width: 22px; height: 22px; accent-color: #3F51A3; flex-shrink: 0">
+<span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 16px; font-weight: 700">1 ay = 1 tam altın</span><span style="font-size: 13px; line-height: 1.45; color: #5E6562">Giderini bilmiyorsan: bir ay, bir tam altının bugünkü değeri kadar sayılır (≈ 42.500 TL).</span></span>
+</label>
+</fieldset>
+
+<p style="margin: 18px 20px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #5E6562"><svg style="flex-shrink: 0" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="#5E6562" stroke-width="1.8"></circle><path d="M12 11v5.5" fill="none" stroke="#5E6562" stroke-width="1.8" stroke-linecap="round"></path><circle cx="12" cy="7.8" r="1.1" fill="#5E6562"></circle></svg>Yatırım tavsiyesi değildir.</p>
+<a href="#" style="margin: 14px 0 0; align-self: center; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: #2F3D80; font-size: 15px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px">Yedeğin var mı? Geri yükle</a>
+
+<a href="02-ana-ekran.html" style="position: absolute; left: 20px; right: 20px; bottom: 28px; height: 54px; border-radius: 999px; background: #3F51A3; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; box-shadow: 0 12px 24px -12px rgba(47, 61, 128, 0.6)">Başla</a>
+
+</div>
+</x-dc>
+</body>
+</html>
