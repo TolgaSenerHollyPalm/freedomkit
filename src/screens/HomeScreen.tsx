@@ -1,4 +1,3 @@
-import BackupReminder from 'kitshelf-ui/backup/BackupReminder.tsx'
 import { IconLink } from 'kitshelf-ui/ui/IconButton.tsx'
 import { HistoryIcon, PlusIcon, SlidersIcon } from 'kitshelf-ui/ui/icons.tsx'
 import IosInstallHint from 'kitshelf-ui/ui/IosInstallHint.tsx'
@@ -11,7 +10,7 @@ import { useOnline } from 'kitshelf-ui/ui/useOnline.ts'
 import { useState } from 'react'
 import { pricingOf, useAppData } from '../app/appData.ts'
 import { href } from '../app/router.ts'
-import { BACKUP_TEXTS, useBackupReminder } from '../backup/kitBackup.ts'
+import { useBackupReminder } from '../backup/kitBackup.ts'
 import { KEYS, KIT_NAME } from '../kit.ts'
 import { amountWithUnit, formatLira } from '../money/amounts.ts'
 import { ASSETS } from '../money/assets.ts'
@@ -105,7 +104,7 @@ export default function HomeScreen() {
   const data = useAppData()
   const online = useOnline()
   const [pricesOpen, setPricesOpen] = useState(false)
-  const { reminder: backup, lastBackupAt, snooze } = useBackupReminder()
+  const { reminder: backup } = useBackupReminder()
   const { movements, settings } = data
   if (!settings) return <WelcomeScreen />
 
@@ -159,9 +158,6 @@ export default function HomeScreen() {
       }
     >
       <IosInstallHint dismissedKey={KEYS.installHintDismissed} />
-      {backup.showBanner && (
-        <BackupReminder reminder={backup} lastBackupAt={lastBackupAt} text={BACKUP_TEXTS.banner} href={href({ screen: 'settings' })} onDismiss={snooze} />
-      )}
       <FreedomCard card={card} settings={settings} tamValue={unitPrice('TAM', pricing)} onPrices={() => setPricesOpen(true)} />
 
       <div className={styles.lines}>

@@ -1,6 +1,6 @@
 import type { BackupAdapter, CountLine, RestoreCount, RestoreMode } from 'kitshelf-ui/backup/format.ts'
 import { backupDue } from 'kitshelf-ui/backup/reminder.ts'
-import { readBackupState, snoozeReminder, type BackupState } from 'kitshelf-ui/backup/state.ts'
+import { readBackupState, type BackupState } from 'kitshelf-ui/backup/state.ts'
 import { restoreMessage } from 'kitshelf-ui/backup/texts.ts'
 import { useCallback, useMemo, useState } from 'react'
 import { useAppData } from '../app/appData.ts'
@@ -17,7 +17,6 @@ export const BACKUP_TEXTS = {
   card: 'Birikim kayıtların yalnızca bu cihazda duruyor. Yedek dosyasını Drive’a, e-postana ya da kendine gönder; telefon değişirse buradan geri yüklersin. Dosyada tutarların var; güvendiğin bir yere kaydet.',
   merge: 'Bu cihazda olmayan hareketler eklenir. İkisinde de olanın daha yeni hâli kalır. Hiçbir şey silinmez.',
   replace: 'Bu cihazdaki hareketler, ayarlar ve elle girilen fiyatlar silinir, yerine yedektekiler gelir.',
-  banner: 'Telefonun değişirse birikim kayıtların kaybolmasın.',
 }
 
 export const replaceWarning = (movements: number) => ({
@@ -122,14 +121,10 @@ function reminderOf(state: BackupState, data: KitData) {
   return backupDue({ now: new Date(), hasUserData: data.movements.length > 0, lastChangeAt: latestChange(data), ...state })
 }
 
-/** Whether a backup is due, for the home screen's banner and dot and for the settings card. */
+/** Whether a backup is due, for the dot on the home screen's settings button and for the settings card. */
 export function useBackupReminder() {
   const { movements, settings, overrides } = useAppData()
   const [state, setState] = useState(() => readBackupState(KIT))
   const refresh = useCallback(() => setState(readBackupState(KIT)), [])
-  const snooze = useCallback(() => {
-    snoozeReminder(KIT, new Date())
-    setState(readBackupState(KIT))
-  }, [])
-  return { reminder: reminderOf(state, { movements, settings, overrides }), lastBackupAt: state.lastBackupAt, refresh, snooze }
+  return { reminder: reminderOf(state, { movements, settings, overrides }), lastBackupAt: state.lastBackupAt, refresh }
 }
