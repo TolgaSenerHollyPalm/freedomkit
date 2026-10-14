@@ -33,6 +33,8 @@ const STATES: Record<Exclude<Freedom['state'], 'free'>, { title: string; line: s
   none: { title: 'Şu an birikimin yok', line: 'Yeni bir birikim ekleyince süre yeniden hesaplanır.' },
   priceless: { title: 'Fiyatlar alınamadı', line: 'İnternete bağlanınca hesaplanır. İstersen fiyatları elle de girebilirsin.' },
 }
+// While the first prices are on their way, "alınamadı" would not be true yet.
+const FETCHING = { title: 'Fiyatlar alınıyor…', line: 'İstersen fiyatları elle de girebilirsin.' }
 
 /** "3 ay 24 gün" in large type; each number keeps its unit, so a narrow card puts "24 gün" on a line of its own. */
 function Duration({ months }: { months: number }) {
@@ -56,8 +58,8 @@ function Duration({ months }: { months: number }) {
   )
 }
 
-function FreedomCard({ card, settings, tamValue, onPrices }: { card: Freedom; settings: Settings; tamValue?: number; onPrices: () => void }) {
-  const state = card.state === 'free' ? undefined : STATES[card.state]
+function FreedomCard({ card, settings, tamValue, fetching, onPrices }: { card: Freedom; settings: Settings; tamValue?: number; fetching: boolean; onPrices: () => void }) {
+  const state = card.state === 'free' ? undefined : card.state === 'priceless' && fetching ? FETCHING : STATES[card.state]
   return (
     <section className={styles.card} aria-label="Özgürlük süren">
       <div className={styles.cardTop}>
@@ -158,7 +160,7 @@ export default function HomeScreen() {
       }
     >
       <IosInstallHint dismissedKey={KEYS.installHintDismissed} />
-      <FreedomCard card={card} settings={settings} tamValue={unitPrice('TAM', pricing)} onPrices={() => setPricesOpen(true)} />
+      <FreedomCard card={card} settings={settings} tamValue={unitPrice('TAM', pricing)} fetching={data.priceStatus.refreshing} onPrices={() => setPricesOpen(true)} />
 
       <div className={styles.lines}>
         <p className={styles.sentence}>

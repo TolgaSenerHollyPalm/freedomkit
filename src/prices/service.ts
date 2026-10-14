@@ -1,4 +1,4 @@
-import { addMonths, daysBetween, isDay, lastDayOf, monthOf, previousDay } from '../money/dates.ts'
+import { addMonths, daysBetween, isDay, lastDayOf, monthOf, previousDay, today } from '../money/dates.ts'
 import { balances } from '../money/holdings.ts'
 import { recordFor } from '../money/prices.ts'
 import type { Day, Movement, PriceRecord } from '../money/types.ts'
@@ -10,6 +10,10 @@ const MIRRORS = [
 ]
 
 export const TIMEOUT_MS = 10_000
+// jsDelivr builds a past day's file when it is first asked for; that took 9–25 s when measured (2026-10-14).
+export const DATED_TIMEOUT_MS = 30_000
+// After the first answer the other mirror gets this long; pages.dev does not answer at all from Turkey.
+export const GRACE_MS = 1500
 export const REFRESH_AFTER_MS = 6 * 60 * 60 * 1000
 const LOOK_BACK_DAYS = 3
 const JUMP_WINDOW_DAYS = 7
@@ -43,9 +47,9 @@ export function implausible(record: PriceRecord, previous: PriceRecord | undefin
 }
 
 /** One address, given up after ten seconds. No-cache: jsDelivr's answer carries a week of browser caching. */
-async function ask(url: string, fetcher: Fetcher, now: () => Date): Promise<PriceRecord | undefined> {
+async function ask(url: string, fetcher: Fetcher, now: () => Date, timeoutMs = TIMEOUT_MS): Promise<PriceRecord | undefined> {
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
     const response = await fetcher(url, { cache: 'no-cache', signal: controller.signal })
     if (!response.ok) return undefined
@@ -57,11 +61,40 @@ async function ask(url: string, fetcher: Fetcher, now: () => Date): Promise<Pric
   }
 }
 
+/** Asks every address at once and settles when all have, `graceMs` after the first answer, or at a `final` one. */
+function answersOf(
+  urls: readonly string[],
+  asking: (url: string) => Promise<PriceRecord | undefined>,
+  graceMs: number,
+  final: (answer: PriceRecord) => boolean = () => false,
+): Promise<PriceRecord[]> {
+  return new Promise((resolve) => {
+    const answers: PriceRecord[] = []
+    let open = urls.length
+    let grace: ReturnType<typeof setTimeout> | undefined
+    const settle = () => {
+      clearTimeout(grace)
+      resolve([...answers])
+    }
+    for (const url of urls) {
+      void asking(url).then((answer) => {
+        if (answer) {
+          answers.push(answer)
+          grace ??= setTimeout(settle, final(answer) ? 0 : graceMs)
+        }
+        open -= 1
+        if (open === 0) settle()
+      })
+    }
+  })
+}
+
 export type LatestResult = { kind: 'record'; record: PriceRecord } | { kind: 'failed' } | { kind: 'implausible' }
 
 /** Asks both mirrors at once and keeps the newer day: one of them can lag a day behind its cache (plan 4.2). */
 export async function fetchLatest(previous: PriceRecord | undefined, fetcher: Fetcher = network, now = () => new Date()): Promise<LatestResult> {
-  const answers = (await Promise.all(latestAddresses().map((url) => ask(url, fetcher, now)))).filter((answer) => answer !== undefined)
+  // Today's prices cannot be bettered, so the other mirror is not waited for.
+  const answers = await answersOf(latestAddresses(), (url) => ask(url, fetcher, now), GRACE_MS, (answer) => answer.date >= today(now()))
   if (answers.length === 0) return { kind: 'failed' }
   const sound = answers.filter((answer) => !implausible(answer, previous))
   if (sound.length === 0) {
@@ -78,10 +111,8 @@ export async function fetchLatest(previous: PriceRecord | undefined, fetcher: Fe
 export async function fetchDay(day: Day, fetcher: Fetcher = network, now = () => new Date()): Promise<PriceRecord | undefined> {
   let asked = day
   for (let back = 0; back <= LOOK_BACK_DAYS; back++) {
-    for (const url of datedAddresses(asked)) {
-      const record = await ask(url, fetcher, now)
-      if (record) return record.date === day ? record : { ...record, monthEnd: day }
-    }
+    const [record] = await answersOf(datedAddresses(asked), (url) => ask(url, fetcher, now, DATED_TIMEOUT_MS), 0)
+    if (record) return record.date === day ? record : { ...record, monthEnd: day }
     asked = previousDay(asked)
   }
   return undefined

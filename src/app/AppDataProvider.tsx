@@ -23,7 +23,8 @@ import styles from './AppDataProvider.module.css'
 // The provider is mounted once, so module-level state is enough: the data as it is right now,
 // which two changes in a row build on rather than on the last render.
 let current: Stored = { movements: [], overrides: {}, prices: [] }
-let asking = false
+let askingLatest = false
+let askingHistory = false // the chart's months can take minutes; today's prices never wait for them
 
 /** Loads everything from IndexedDB once, then keeps it in memory and writes every change back. */
 export default function AppDataProvider({ children }: { children: ReactNode }) {
@@ -55,31 +56,47 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
     [apply, report],
   )
 
-  // Today's prices first, then the chart's month ends one at a time; one round at a time.
-  const askPrices = useCallback(
-    async (latestToo: boolean) => {
-      if (asking || !navigator.onLine) return
-      asking = true
-      try {
-        if (latestToo) {
-          setPriceStatus({ refreshing: true, failed: false })
-          const result = await fetchLatest(latestRecord(current.prices))
-          if (result.kind === 'record') addPrices([result.record])
-          setPriceStatus({ refreshing: false, failed: result.kind !== 'record' })
-        }
-        for (const day of missingMonthEnds(current.movements, today(), current.prices)) {
-          const record = await fetchDay(day)
-          if (record) addPrices([record])
-        }
-      } finally {
-        asking = false
+  const askLatest = useCallback(async () => {
+    if (askingLatest || !navigator.onLine) return
+    askingLatest = true
+    setPriceStatus({ refreshing: true, failed: false })
+    let failed = true
+    try {
+      const result = await fetchLatest(latestRecord(current.prices))
+      if (result.kind === 'record') {
+        addPrices([result.record])
+        failed = false
       }
+    } finally {
+      askingLatest = false
+      setPriceStatus({ refreshing: false, failed })
+    }
+  }, [addPrices])
+
+  // The chart's month ends, one at a time.
+  const askHistory = useCallback(async () => {
+    if (askingHistory || !navigator.onLine) return
+    askingHistory = true
+    try {
+      for (const day of missingMonthEnds(current.movements, today(), current.prices)) {
+        const record = await fetchDay(day)
+        if (record) addPrices([record])
+      }
+    } finally {
+      askingHistory = false
+    }
+  }, [addPrices])
+
+  const askPrices = useCallback(
+    (latestToo: boolean) => {
+      if (latestToo) void askLatest()
+      void askHistory()
     },
-    [addPrices],
+    [askLatest, askHistory],
   )
 
-  const refreshPrices = useCallback(() => void askPrices(true), [askPrices])
-  const loadHistory = useCallback(() => void askPrices(false), [askPrices])
+  const refreshPrices = useCallback(() => askPrices(true), [askPrices])
+  const loadHistory = useCallback(() => askPrices(false), [askPrices])
 
   useEffect(() => {
     let active = true
@@ -88,7 +105,7 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
       .then((stored) => {
         if (!active) return
         apply(stored)
-        void askPrices(stale(latestRecord(stored.prices), new Date()))
+        askPrices(stale(latestRecord(stored.prices), new Date()))
       })
       .catch((error: unknown) => {
         console.error(error)
@@ -101,7 +118,7 @@ export default function AppDataProvider({ children }: { children: ReactNode }) {
 
   // Back online: ask again if today's prices are old or the last ask failed, and fill the chart's gaps.
   useEffect(() => {
-    const retry = () => void askPrices(priceFailed || stale(latestRecord(current.prices), new Date()))
+    const retry = () => askPrices(priceFailed || stale(latestRecord(current.prices), new Date()))
     window.addEventListener('online', retry)
     return () => window.removeEventListener('online', retry)
   }, [askPrices, priceFailed])

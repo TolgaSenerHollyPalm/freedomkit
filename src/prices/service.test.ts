@@ -4,7 +4,7 @@ import type { PriceRecord } from '../money/types.ts'
 import dated20251031 from './fixtures/dated-2025-10-31.json'
 import dated20260930 from './fixtures/dated-2026-09-30.json'
 import latest from './fixtures/latest-2026-10-01.json'
-import { datedAddresses, fetchDay, fetchLatest, implausible, latestAddresses, missingMonthEnds, readAnswer, stale, TIMEOUT_MS, type Fetcher } from './service.ts'
+import { DATED_TIMEOUT_MS, datedAddresses, fetchDay, fetchLatest, GRACE_MS, implausible, latestAddresses, missingMonthEnds, readAnswer, stale, TIMEOUT_MS, type Fetcher } from './service.ts'
 
 const NOW = new Date('2026-10-01T09:00:00.000Z')
 const now = () => NOW
@@ -87,6 +87,28 @@ describe('the latest prices', () => {
     expect(await fetchLatest(undefined, network({ [jsdelivr]: () => answer('<html></html>'), [pages]: () => answer({ date: '2026-10-01', try: {} }) }), now)).toEqual({ kind: 'failed' })
   })
 
+  it('does not wait for a mirror that never answers once the other has', async () => {
+    vi.useFakeTimers()
+    const blocked: Fetcher = (url, init) => (url === pages ? hanging(url, init) : network({ [jsdelivr]: () => answer(dated20260930) })(url, init))
+    let settled = false
+    const result = fetchLatest(undefined, blocked, now).finally(() => (settled = true))
+    await vi.advanceTimersByTimeAsync(GRACE_MS - 1)
+    expect(settled).toBe(false) // a day behind: the other mirror may still bring today's
+    await vi.advanceTimersByTimeAsync(1)
+    expect(settled).toBe(true)
+    expect((await result).kind).toBe('record')
+  })
+
+  it('takes today’s prices at once', async () => {
+    vi.useFakeTimers()
+    const blocked: Fetcher = (url, init) => (url === pages ? hanging(url, init) : network({ [jsdelivr]: () => answer(latest) })(url, init))
+    let settled = false
+    const result = fetchLatest(undefined, blocked, now).finally(() => (settled = true))
+    await vi.advanceTimersByTimeAsync(1)
+    expect(settled).toBe(true)
+    expect((await result).kind === 'record').toBe(true)
+  })
+
   it('gives up after ten seconds', async () => {
     vi.useFakeTimers()
     const result = fetchLatest(undefined, hanging, now)
@@ -120,6 +142,18 @@ describe('a past day’s prices', () => {
     const found = await fetchDay('2026-09-30', network({ [pages]: () => answer({ ...dated20260930, date: '2026-09-28' }) }, asked), now)
     expect(found).toMatchObject({ date: '2026-09-28', monthEnd: '2026-09-30' })
     expect(asked).toEqual([...datedAddresses('2026-09-30'), ...datedAddresses('2026-09-29'), ...datedAddresses('2026-09-28')])
+  })
+
+  it('waits for jsDelivr while it builds a past day’s file, and not for a mirror that never answers', async () => {
+    vi.useFakeTimers()
+    const [jsdelivr, pages] = datedAddresses('2025-10-31')
+    const slow: Fetcher = (url, init) =>
+      url === pages ? hanging(url, init) : new Promise((resolve) => setTimeout(() => resolve(answer(dated20251031)), 20_000))
+    const found = fetchDay('2025-10-31', slow, now)
+    await vi.advanceTimersByTimeAsync(20_001)
+    expect(await found).toMatchObject({ date: '2025-10-31' })
+    expect(DATED_TIMEOUT_MS).toBeGreaterThan(25_000)
+    expect(jsdelivr).toContain('jsdelivr')
   })
 
   it('stops after three days back', async () => {
